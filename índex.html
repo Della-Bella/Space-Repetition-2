@@ -1,8 +1,73 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <script type="module" src="script.js"></script>
-  </head>
-  <body>
-  </body>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spaced Repetition Task Tracker</title>
+</head>
+
+<body>
+  <h1>Spaced Repetition Task Tracker</h1>
+</body>
+
+<!-- DIV 1 = User Select Area-->
+<div id="userSelectionArea">
+  <label for="userSelect">Select User:</label>
+  <select id="userSelect">
+    <!-- Options /dropdonw  JavaScript -->
+  </select>
+
+</div>
+<hr>
+<!--END User Select Area-->
+
+<!--DIV 2 H2 & FORM -->
+  <div id="addTaskSection">
+
+    <!--H2 FOR TOPIC -->
+<h2> Add New Task</h2>
+<hr>
+
+<form id="addTaskForm">
+<!-- DIV A = TASK  -->
+<div>
+  <label for="taskNameInput">Task Name:</label>
+  <input id="taskNameInput" type="text" required>
+</div>
+
+
+<!-- DIV B CALENDAIR-->
+<div>
+  <label for="startDateInput">Start Date:</label>
+  <input id="startDateInput" type="date" required>
+</div>
+
+<!-- BUTTON-->
+<button id="submitTaskButton" type="submit">Add Task</button>
+
+<!--END OF FORM-->
+</form>
+<hr>
+</div>
+
+<!--AREA FOR DISPLAY TASKS-->
+
+<div id="taskDisplayArea">
+
+<h2>Task List</h2>
+
+
+  <p id="noTaskMesage" styel="display: none;"> No Tasks for the user.</p>
+  <ul id="taskList">
+    <!--task js -->
+  </ul>
+  <hr>
+</div>
+
+</html>
+</div>
+<script type="module" src="js/script.js"></script>
+</body>
+
 </html>
