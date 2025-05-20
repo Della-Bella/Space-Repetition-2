@@ -31,15 +31,14 @@ const submitTaskButton = document.getElementById("submitTaskButton");
 // AREA DISPLAY REF//
 const taskDisplayArea = document.getElementById("taskDisplayArea");
 const taskList = document.getElementById("taskList");
+const noTaskMesage = document.getElementById("noTaskMesage");
 
 // STARTING selectUsrrID from the dropfdonw menu//
 
-//1- safet check if dropdonw existe:
+const userSelectDropdown = document.getElementById("userSelect");
 
-
-  const userSelectDropdown = document.getElementById("userSelect");
-
-  // SAFE CHECK IF DROPDOWN/user EXISTS:
+  //1- safet check if dropdonw existe:
+  
   if (userSelectDropdown) {
     console.log("SUCCESS - The id='userSelect' HTML element was found.");
 
@@ -48,7 +47,7 @@ const taskList = document.getElementById("taskList");
     const defaultOption = document.createElement('option');// CREAT A COSNT FOR THE ELEMENT
     defaultOption.value = ""; // Empty value
     defaultOption.textContent = "Select a user...";
-    defaultOption.selected = true; // VER IMPORTANT TOMAKE THIS OPTION APPER FISRT
+    defaultOption.selected = true; // VER IMPORTANT TO MAKE THIS OPTION APPER FISRT
     userSelectDropdown.appendChild(defaultOption);
     console.log("Default 'Select a user...' option added to dropdown.");
 
@@ -66,7 +65,7 @@ const taskList = document.getElementById("taskList");
         const option = document.createElement('option');
         option.value = userId;                 
         option.textContent = `User ${userId}`; //get value of the arry or ption.textContent = userId; ( 1, 2, 3, 4, 5)
-        userSelectDropdown.appendChild(option); // show creat value in the dropmenu visiblein the broser
+        userSelectDropdown.appendChild(option); // show creat value in the dropmenu visible in the broser
       });
 
       console.log("Actual user options added to dropdown."); // check console if working
@@ -84,26 +83,65 @@ const taskList = document.getElementById("taskList");
 
   console.log("Safety check finished.")
 
+  //CARD 03---Displaying Tasks for Selected Use/ PART 1= CHECK AND CHANGE USER
+
+  //const userSelectDropdown = document.getElementById("userSelect"); // userSelectDropdown/userSelect need to watch this to check if it has been changed
+  
+
+  if (userSelectDropdown) { // check if it exists and has been changed
+    userSelectDropdown.addEventListener('change', function (event) {
+      console.log("Dropdown selection changed!");
 
 
+      const selectedUserId = event.target.value; // 'event.target' is the dropdown element itself / value is the option choosen
+      console.log("Selected User ID:", selectedUserId);
+
+// A)= if user has been chaneg before display task need to clear dispaly
+
+  taskList.innerHTML = ''; // This removes all <li> child elements from the <ul>
+  console.log("Task list cleared.");
+
+ //B) NOW GET DATA/ TASK DO USER
+
+  if (selectedUserId) { // try to get data if a user ID was actually selected
+    const agendaItems = getData(selectedUserId); // Fetch data using the function from storage.js
+    console.log("Data for user:", selectedUserId, agendaItems);
+
+  //C)  CHECK TASK FOR THE USER 
+    // Now, check if this selected user HAS any tasks
+
+      if (agendaItems && agendaItems.length > 0) {
+        // There ARE agenda items to display
+        noTaskMesage.style.display = 'none'; // Hide the "no tasks" message
+        taskList.style.display = '';        // Make sure the <ul> is visible (resets to default display)
 
 
+//D) DISPLAY TASKS OR "MESSAHE NO TASKS"
 
+        agendaItems.forEach(function (item) {
+          const listItem = document.createElement('li'); // Create a new <li> element
+          listItem.textContent = `${item.topic} - ${item.revisionDate}`; // Set its text
+          taskList.appendChild(listItem); // Add the <li> to the <ul>
+        });
+        console.log(`Displayed ${agendaItems.length} tasks for User ${selectedUserId}`);
+      }
+      } else {
+        // This is the 'else' for 'if (selectedUserId)'
+        // NO user is selected (e.g., "Select a user..." option was chosen)
+        noTaskMesage.style.display = 'block'; // Show a message
+        noTaskMesage.textContent = "Please select a user to see their agenda."; // Set appropriate message
+        taskList.style.display = 'none';      // Hide the task list UL
+       console.log("No user selected (default option). Displaying 'Please select' message."); 
+      }
+    
+    }); // Close  addEventListener function and call
 
-
-
-
-
-
-
-
+  } else { 
+    console.error("CRITICAL: Could not add event listener because userSelectDropdown was not found.");
+  }  
 
 
 
 }; // End of window.onload
 
 console.log("main.js: Script parsing finished.");
-
-
-
-
