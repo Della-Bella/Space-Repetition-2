@@ -27,7 +27,7 @@ const addTaskForm = document.getElementById("addTaskForm");
 const taskNameInput = document.getElementById("taskNameInput");
 const startDateInput = document.getElementById("startDateInput");
 const submitTaskButton = document.getElementById("submitTaskButton");
-
+  //console.log(addTaskForm, taskNameInput, startDateInput);
 // AREA DISPLAY REF//
 const taskDisplayArea = document.getElementById("taskDisplayArea");
 const taskList = document.getElementById("taskList");
@@ -116,7 +116,7 @@ const userSelectDropdown = document.getElementById("userSelect");
         taskList.style.display = '';        // Make sure the <ul> is visible (resets to default display)
 
 
-//D) DISPLAY TASKS OR "MESSAHE NO TASKS"
+//D) DISPLAY TASKS OR "MESSAgE NO TASKS"
 
         agendaItems.forEach(function (item) {
           const listItem = document.createElement('li'); // Create a new <li> element
@@ -135,6 +135,29 @@ const userSelectDropdown = document.getElementById("userSelect");
       }
     
     }); // Close  addEventListener function and call
+
+    // --- NEW pase 4: Event Listener for Form Submission ---
+
+    if (addTaskForm) { //  check if the form element was found
+      addTaskForm.addEventListener('submit', function (event) {
+        console.log("Add Task form submitted!");
+
+        event.preventDefault(); // VERY IMPORTANT: Prevents the page from reloading
+        console.log("Add Task form submitted! Default page reload PREVENTED.");
+
+        const taskName = taskNameInput.value;
+        const startDate = startDateInput.value;
+
+        console.log("Task Name entered:", taskName);
+        console.log("Start Date selected:", startDate);
+      });
+      console.log("Event listener added to addTaskForm for 'submit' event.");
+    } else {
+      console.error("CRITICAL: addTaskForm element not found. Cannot add submit listener.");
+    }
+  
+
+
 
   } else { 
     console.error("CRITICAL: Could not add event listener because userSelectDropdown was not found.");
