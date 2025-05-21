@@ -51,6 +51,34 @@ const userSelectDropdown = document.getElementById("userSelect");
     userSelectDropdown.appendChild(defaultOption);
     console.log("Default 'Select a user...' option added to dropdown.");
 
+    // ---CARD 3 PART PAHSE 6- SET ATUAL DATE DEFAULT  ---
+    if (startDateInput) { // Check if the date input element exists
+      const today = new Date(); // 1. Create a new Date object= TODY'S DATE
+
+      // 2. Format the date to YYYY-MM-DD
+      //    - today.getFullYear() gives the year (e.g., 2024)
+      //    - today.getMonth() gives the month (0-11, so add 1)
+      //    - today.getDate() gives the day (1-31)
+      //    - Month and day are two digits/ 5 = 05
+
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0'); // convert to String/ index intial 0 add +1, padStart "2 digits" + 0
+      const day = String(today.getDate()).padStart(2, '0');       // convert to String/ padstart make sure it is 2 digits
+
+      const formattedDate = `${year}-${month}-${day}`; // e.g., "2024-05-17"
+    
+
+      startDateInput.value = formattedDate; // Set the value of the date input
+      console.log("Default start date set to:", formattedDate);
+    } else {
+      console.warn("startDateInput element not found. Cannot set default date.");
+    }
+
+
+
+
+
+
 
     // --- STEP 2: USER IDs ADD DROPDONN MENU ---
     // 1- Create loop to add the users
