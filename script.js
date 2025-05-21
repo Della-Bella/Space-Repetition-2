@@ -11,6 +11,71 @@ import { addData, clearData, getData } from "/storage.js";
 
 console.log("script.js: Script parsing started.");
 
+// --- CARD 8= HELPER FUNCTION to format a Date object to YYYY-MM-DD string ---
+function formatDate(dateObject) {
+  const year = dateObject.getFullYear();
+  const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+  const day = String(dateObject.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+// CARD 7- START CLCULATE TASK INTERVAL DATES// FUNCTION NEEDS TO BE OUTSIDE THE WINDOW.LOAD
+
+  function calculateRevisionDates(startDateString, topicName) {
+    console.log(`Calculating revision dates for topic "${topicName}" starting from "${startDateString}"`);
+
+    const startDate = new Date(startDateString);
+    startDate.setHours(12, 0, 0, 0); // Ensure consistent date handling
+
+    const agendaItems = [];
+
+    // Calculate +1 Week
+    const datePlus1Week = new Date(startDate);
+    datePlus1Week.setDate(startDate.getDate() + 7);
+    agendaItems.push({
+      topic: topicName,
+      revisionDate: formatDate(datePlus1Week)
+    });
+
+    // --- NEW: Calculate +1 Month ---
+    const datePlus1Month = new Date(startDate);
+    datePlus1Month.setMonth(startDate.getMonth() + 1);
+    agendaItems.push({
+      topic: topicName,
+      revisionDate: formatDate(datePlus1Month)
+    });
+    // --- END OF +1 Month ---
+
+    // --- NEW: Calculate +3 Months ---
+    const datePlus3Months = new Date(startDate);
+    datePlus3Months.setMonth(startDate.getMonth() + 3);
+    agendaItems.push({
+      topic: topicName,
+      revisionDate: formatDate(datePlus3Months)
+    });
+    // --- END OF +3 Months ---
+
+    // --- NEW: Calculate +6 Months ---
+    const datePlus6Months = new Date(startDate);
+    datePlus6Months.setMonth(startDate.getMonth() + 6);
+    agendaItems.push({
+      topic: topicName,
+      revisionDate: formatDate(datePlus6Months)
+    });
+    // --- END OF +6 Months ---
+
+    // --- NEW: Calculate +1 Year ---
+    const datePlus1Year = new Date(startDate);
+    datePlus1Year.setFullYear(startDate.getFullYear() + 1);
+    agendaItems.push({
+      topic: topicName,
+      revisionDate: formatDate(datePlus1Year)
+    });
+ 
+
+    console.log("Calculated agenda items:", agendaItems); // Log the full list
+    return agendaItems;
+  }
 
 window.onload = function () {
   const users = getUserIDs();
@@ -70,6 +135,8 @@ const userSelectDropdown = document.getElementById("userSelect");
 
       startDateInput.value = formattedDate; // Set the value of the date input
       console.log("Default start date set to:", formattedDate);
+
+      
     } else {
       console.warn("startDateInput element not found. Cannot set default date.");
     }
