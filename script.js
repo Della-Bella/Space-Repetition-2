@@ -27,7 +27,7 @@ const addTaskForm = document.getElementById("addTaskForm");
 const taskNameInput = document.getElementById("taskNameInput");
 const startDateInput = document.getElementById("startDateInput");
 const submitTaskButton = document.getElementById("submitTaskButton");
-
+  //console.log(addTaskForm, taskNameInput, startDateInput);
 // AREA DISPLAY REF//
 const taskDisplayArea = document.getElementById("taskDisplayArea");
 const taskList = document.getElementById("taskList");
@@ -50,6 +50,34 @@ const userSelectDropdown = document.getElementById("userSelect");
     defaultOption.selected = true; // VER IMPORTANT TO MAKE THIS OPTION APPER FISRT
     userSelectDropdown.appendChild(defaultOption);
     console.log("Default 'Select a user...' option added to dropdown.");
+
+    // ---CARD 3 PART PAHSE 6- SET ATUAL DATE DEFAULT  ---
+    if (startDateInput) { // Check if the date input element exists
+      const today = new Date(); // 1. Create a new Date object= TODY'S DATE
+
+      // 2. Format the date to YYYY-MM-DD
+      //    - today.getFullYear() gives the year (e.g., 2024)
+      //    - today.getMonth() gives the month (0-11, so add 1)
+      //    - today.getDate() gives the day (1-31)
+      //    - Month and day are two digits/ 5 = 05
+
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0'); // convert to String/ index intial 0 add +1, padStart "2 digits" + 0
+      const day = String(today.getDate()).padStart(2, '0');       // convert to String/ padstart make sure it is 2 digits
+
+      const formattedDate = `${year}-${month}-${day}`; // e.g., "2024-05-17"
+    
+
+      startDateInput.value = formattedDate; // Set the value of the date input
+      console.log("Default start date set to:", formattedDate);
+    } else {
+      console.warn("startDateInput element not found. Cannot set default date.");
+    }
+
+
+
+
+
 
 
     // --- STEP 2: USER IDs ADD DROPDONN MENU ---
@@ -116,7 +144,7 @@ const userSelectDropdown = document.getElementById("userSelect");
         taskList.style.display = '';        // Make sure the <ul> is visible (resets to default display)
 
 
-//D) DISPLAY TASKS OR "MESSAHE NO TASKS"
+//D) DISPLAY TASKS OR "MESSAgE NO TASKS"
 
         agendaItems.forEach(function (item) {
           const listItem = document.createElement('li'); // Create a new <li> element
@@ -135,6 +163,29 @@ const userSelectDropdown = document.getElementById("userSelect");
       }
     
     }); // Close  addEventListener function and call
+
+    // --- NEW pase 4: Event Listener for Form Submission ---
+
+    if (addTaskForm) { //  check if the form element was found
+      addTaskForm.addEventListener('submit', function (event) {
+        console.log("Add Task form submitted!");
+
+        event.preventDefault(); // VERY IMPORTANT: Prevents the page from reloading
+        console.log("Add Task form submitted! Default page reload PREVENTED.");
+
+        const taskName = taskNameInput.value;
+        const startDate = startDateInput.value;
+
+        console.log("Task Name entered:", taskName);
+        console.log("Start Date selected:", startDate);
+      });
+      console.log("Event listener added to addTaskForm for 'submit' event.");
+    } else {
+      console.error("CRITICAL: addTaskForm element not found. Cannot add submit listener.");
+    }
+  
+
+
 
   } else { 
     console.error("CRITICAL: Could not add event listener because userSelectDropdown was not found.");
