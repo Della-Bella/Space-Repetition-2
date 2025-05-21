@@ -23,7 +23,7 @@ window.onload = function () {
 const userSelect = document.getElementById("userSelect");
 
 //ELEMENTS FORM REFERENCE//
-
+const addTaskForm = document.getElementById("addTaskForm");
 const taskNameInput = document.getElementById("taskNameInput");
 const startDateInput = document.getElementById("startDateInput");
 const submitTaskButton = document.getElementById("submitTaskButton");
