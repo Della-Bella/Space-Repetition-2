@@ -77,6 +77,60 @@ function formatDate(dateObject) {
     return agendaItems;
   }
 
+// --- CARD 8 PAHESE B Function to Render Agenda for a User 
+function renderAgenda(userId) {
+  console.log(`renderAgenda called for User ID: ${userId}`);
+  // We will move the task display logic here in the next step.
+  // --- Mcard 8 PHASE C renderAgenda function ---
+
+  const taskListElement = document.getElementById("taskList");  // These were previously defined inside window.onload, but renderAgenda is global.
+  const noTaskMessageElement = document.getElementById("noTaskMesage");  // These were previously defined inside window.onload, but renderAgenda is global.
+  // Safety check if elements aren't found (should not happen if HTML is correct)
+  if (!taskListElement || !noTaskMessageElement) {
+    console.error("CRITICAL: taskList or noTaskMesage element not found in renderAgenda!");
+    return; // Exit the function if essential elements are missing
+  }
+
+  // A) Clear previous tasks from the list
+  taskListElement.innerHTML = '';
+  console.log("renderAgenda: Task list cleared.");
+
+  // B) Handle based on whether a user is selected
+  if (userId) { // A user ID was provided
+    const agendaItems = getData(userId); // Fetch data for the selected user
+    console.log(`renderAgenda: Data for user ${userId}:`, agendaItems);
+
+    // C) Check if the user has tasks
+    if (agendaItems && agendaItems.length > 0) {
+      // User HAS tasks
+      noTaskMessageElement.style.display = 'none'; // Hide "no tasks" message
+      taskListElement.style.display = '';        // Make sure task list UL is visible
+
+      // D) Display the tasks
+      agendaItems.forEach(function (item) {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${item.topic} - ${item.revisionDate}`;
+        taskListElement.appendChild(listItem);
+      });
+      console.log(`renderAgenda: Displayed ${agendaItems.length} tasks for User ${userId}`);
+    } else {
+      // User is selected, but has NO tasks (or agendaItems is null)
+      noTaskMessageElement.style.display = 'block'; // Show the message
+      noTaskMessageElement.textContent = "No tasks for this user."; // Set appropriate message
+      taskListElement.style.display = 'none';    // Hide the (empty) task list UL
+      console.log(`renderAgenda: No tasks found for User ${userId}. Displaying message.`);
+    }
+  } else {
+    // NO user ID was provided (e.g., "Select a user..." was chosen)
+    noTaskMessageElement.style.display = 'block'; // Show the message
+    noTaskMessageElement.textContent = "Please select a user to see their agenda.";
+    taskListElement.style.display = 'none';      // Hide the task list UL
+    console.log("renderAgenda: No user selected. Displaying 'Please select' message.");
+  }
+}
+// --- END OF renderAgenda FUNCTION DEFINITION ---
+
+
 window.onload = function () {
   const users = getUserIDs();
   //document.querySelector("body").innerText = `There are ${users.length} users`;// coment this LINE!!! OR DELET IT
@@ -141,12 +195,6 @@ const userSelectDropdown = document.getElementById("userSelect");
       console.warn("startDateInput element not found. Cannot set default date.");
     }
 
-
-
-
-
-
-
     // --- STEP 2: USER IDs ADD DROPDONN MENU ---
     // 1- Create loop to add the users
     // a) criar variable const to armazen the data 
@@ -189,45 +237,62 @@ const userSelectDropdown = document.getElementById("userSelect");
 
 
       const selectedUserId = event.target.value; // 'event.target' is the dropdown element itself / value is the option choosen
-      console.log("Selected User ID:", selectedUserId);
+      console.log("Selected User ID:", selectedUserId); //keep this before Card 8 phase B
+
+
+     
+      
+    
+
+
+
+
+
+
+
+
+
+
+      // --- All the old display logic that was here is now GONE from the event listener ---
+
 
 // A)= if user has been chaneg before display task need to clear dispaly
 
-  taskList.innerHTML = ''; // This removes all <li> child elements from the <ul>
-  console.log("Task list cleared.");
+  // taskList.innerHTML = ''; // This removes all <li> child elements from the <ul>
+  // console.log("Task list cleared.");
 
  //B) NOW GET DATA/ TASK DO USER
 
-  if (selectedUserId) { // try to get data if a user ID was actually selected
-    const agendaItems = getData(selectedUserId); // Fetch data using the function from storage.js
-    console.log("Data for user:", selectedUserId, agendaItems);
+//   if (selectedUserId) { // try to get data if a user ID was actually selected
+//     const agendaItems = getData(selectedUserId); // Fetch data using the function from storage.js
+//     console.log("Data for user:", selectedUserId, agendaItems);
 
-  //C)  CHECK TASK FOR THE USER 
-    // Now, check if this selected user HAS any tasks
+//   //C)  CHECK TASK FOR THE USER 
+//     // Now, check if this selected user HAS any tasks
 
-      if (agendaItems && agendaItems.length > 0) {
-        // There ARE agenda items to display
-        noTaskMesage.style.display = 'none'; // Hide the "no tasks" message
-        taskList.style.display = '';        // Make sure the <ul> is visible (resets to default display)
+//       if (agendaItems && agendaItems.length > 0) {
+//         // There ARE agenda items to display
+//         noTaskMesage.style.display = 'none'; // Hide the "no tasks" message
+//         taskList.style.display = '';        // Make sure the <ul> is visible (resets to default display)
 
 
-//D) DISPLAY TASKS OR "MESSAgE NO TASKS"
+// //D) DISPLAY TASKS OR "MESSAgE NO TASKS"
 
-        agendaItems.forEach(function (item) {
-          const listItem = document.createElement('li'); // Create a new <li> element
-          listItem.textContent = `${item.topic} - ${item.revisionDate}`; // Set its text
-          taskList.appendChild(listItem); // Add the <li> to the <ul>
-        });
-        console.log(`Displayed ${agendaItems.length} tasks for User ${selectedUserId}`);
-      }
-      } else {
-        // This is the 'else' for 'if (selectedUserId)'
-        // NO user is selected (e.g., "Select a user..." option was chosen)
-        noTaskMesage.style.display = 'block'; // Show a message
-        noTaskMesage.textContent = "Please select a user to see their agenda."; // Set appropriate message
-        taskList.style.display = 'none';      // Hide the task list UL
-       console.log("No user selected (default option). Displaying 'Please select' message."); 
-      }
+//         agendaItems.forEach(function (item) {
+//           const listItem = document.createElement('li'); // Create a new <li> element
+//           listItem.textContent = `${item.topic} - ${item.revisionDate}`; // Set its text
+//           taskList.appendChild(listItem); // Add the <li> to the <ul>
+//         });
+//         console.log(`Displayed ${agendaItems.length} tasks for User ${selectedUserId}`);
+//       }
+//       } else {
+//         // This is the 'else' for 'if (selectedUserId)'
+//         // NO user is selected (e.g., "Select a user..." option was chosen)
+//         noTaskMesage.style.display = 'block'; // Show a message
+//         noTaskMesage.textContent = "Please select a user to see their agenda."; // Set appropriate message
+//         taskList.style.display = 'none';      // Hide the task list UL
+//        console.log("No user selected (default option). Displaying 'Please select' message."); 
+//       }
     
     }); // Close  addEventListener function and call
 
