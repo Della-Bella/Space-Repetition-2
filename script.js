@@ -238,20 +238,7 @@ const userSelectDropdown = document.getElementById("userSelect");
 
       const selectedUserId = event.target.value; // 'event.target' is the dropdown element itself / value is the option choosen
       console.log("Selected User ID:", selectedUserId); //keep this before Card 8 phase B
-
-
-     
-      
-    
-
-
-
-
-
-
-
-
-
+      renderAgenda(selectedUserId); 
 
       // --- All the old display logic that was here is now GONE from the event listener ---
 
@@ -310,14 +297,48 @@ const userSelectDropdown = document.getElementById("userSelect");
 
         console.log("Task Name entered:", taskName);
         console.log("Start Date selected:", startDate);
+
+        // CARD 8 PART C:
+
+  
+        if (taskName && startDate) { // Basic validation: ensure both fields have a value
+          const newAgendaItems = calculateRevisionDates(startDate, taskName);
+          console.log("Form Submit - Calculated Spaced Repetition Dates:", newAgendaItems);
+
+          // 1- Get the currently selected User ID
+          const currentSelectedUserId = userSelectDropdown.value;
+
+          if (currentSelectedUserId) { // check the user is selected
+         
+            addData(currentSelectedUserId, newAgendaItems);   // Call addData to save the new items
+            console.log(`Form Submit - Added ${newAgendaItems.length} new items for User ID: ${currentSelectedUserId}`);
+
+            // 3- Call renderAgenda to refresh the display
+            renderAgenda(currentSelectedUserId);
+            console.log("Form Submit - Agenda re-rendered.");
+
+            // 4-Clear the form fields after successful submission
+            taskNameInput.value = ''; // Clear the task name input
+            console.log("Form Submit - Form fields cleared.");
+
+          } else {
+            console.warn("Form Submit - No user selected in the dropdown. Cannot add task.");
+            alert("Please select a user from the dropdown before adding a task."); // User-facing message
+          }
+
+        } else {
+          console.warn("Form Submit - Task name or start date is missing.");
+          alert("Please enter both a task name and a start date."); // User-facing message
+        }
+        // --- END OF card 8 PART C ---
       });
+
+
       console.log("Event listener added to addTaskForm for 'submit' event.");
     } else {
       console.error("CRITICAL: addTaskForm element not found. Cannot add submit listener.");
     }
   
-
-
 
   } else { 
     console.error("CRITICAL: Could not add event listener because userSelectDropdown was not found.");
