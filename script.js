@@ -34,7 +34,8 @@ function formatDate(dateObject) {
     datePlus1Week.setDate(startDate.getDate() + 7);
     agendaItems.push({
       topic: topicName,
-      revisionDate: formatDate(datePlus1Week)
+      revisionDate: formatDate(datePlus1Week),
+       intervalLabel: "+1 Week"
     });
 
     // --- NEW: Calculate +1 Month ---
@@ -42,7 +43,8 @@ function formatDate(dateObject) {
     datePlus1Month.setMonth(startDate.getMonth() + 1);
     agendaItems.push({
       topic: topicName,
-      revisionDate: formatDate(datePlus1Month)
+      revisionDate: formatDate(datePlus1Month),
+      intervalLabel: "+1 Month" //add label interval 
     });
     // --- END OF +1 Month ---
 
@@ -51,7 +53,8 @@ function formatDate(dateObject) {
     datePlus3Months.setMonth(startDate.getMonth() + 3);
     agendaItems.push({
       topic: topicName,
-      revisionDate: formatDate(datePlus3Months)
+      revisionDate: formatDate(datePlus3Months),
+      intervalLabel: "+3 Months"
     });
     // --- END OF +3 Months ---
 
@@ -60,7 +63,8 @@ function formatDate(dateObject) {
     datePlus6Months.setMonth(startDate.getMonth() + 6);
     agendaItems.push({
       topic: topicName,
-      revisionDate: formatDate(datePlus6Months)
+      revisionDate: formatDate(datePlus6Months),
+      intervalLabel: "+6 Months" 
     });
     // --- END OF +6 Months ---
 
@@ -69,11 +73,12 @@ function formatDate(dateObject) {
     datePlus1Year.setFullYear(startDate.getFullYear() + 1);
     agendaItems.push({
       topic: topicName,
-      revisionDate: formatDate(datePlus1Year)
+      revisionDate: formatDate(datePlus1Year),
+      intervalLabel: "+1 Year"
     });
  
 
-    console.log("Calculated agenda items:", agendaItems); // Log the full list
+    console.log("Calculated agenda items (with labels):", agendaItems); // Log the full list
     return agendaItems;
   }
 
@@ -109,7 +114,8 @@ function renderAgenda(userId) {
       // D) Display the tasks
       agendaItems.forEach(function (item) {
         const listItem = document.createElement('li');
-        listItem.textContent = `${item.topic} - ${item.revisionDate}`;
+        let displayText = `${item.topic} - ${item.revisionDate}`; // add to display lalbes
+        listItem.textContent = `${item.topic} - ${item.revisionDate} (${item.intervalLabel})`;// add to display lalbes
         taskListElement.appendChild(listItem);
       });
       console.log(`renderAgenda: Displayed ${agendaItems.length} tasks for User ${userId}`);
