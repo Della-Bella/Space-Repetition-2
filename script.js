@@ -5,82 +5,81 @@
 // You can't open the index.html file using a file:// URL.
 
 
-import { getUserIDs } from "/common.mjs";
-
-import { addData, clearData, getData } from "/storage.js"; 
+import { getUserIDs } from "/common.mjs"; // Provides user IDs (Phase 1, Step 1 / Phase 2, Step 3)
+import { addData, clearData, getData } from "/storage.js"; // Provides data storage functions (Phase 1, Step 2 / Used throughout)
 
 console.log("script.js: Script parsing started.");
 
 // --- CARD 8= HELPER FUNCTION to format a Date object to YYYY-MM-DD string ---
 function formatDate(dateObject) {
-  const year = dateObject.getFullYear();
-  const month = String(dateObject.getMonth() + 1).padStart(2, '0');
   const day = String(dateObject.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+  const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+  const year = dateObject.getFullYear();
+  return `${day}/${month}/${year}`; // Changed to DD/MM/YYYY
 }
 
-// CARD 7- START CLCULATE TASK INTERVAL DATES// FUNCTION NEEDS TO BE OUTSIDE THE WINDOW.LOAD
+// CARD 7 Phase 3,- START CALCULATE TASK INTERVAL DATES// FUNCTION NEEDS TO BE OUTSIDE THE WINDOW.LOAD
 
-  function calculateRevisionDates(startDateString, topicName) {
-    console.log(`Calculating revision dates for topic "${topicName}" starting from "${startDateString}"`);
+function calculateRevisionDates(startDateString, topicName) {
+  console.log(`Calculating revision dates for topic "${topicName}" starting from "${startDateString}"`);
 
-    const startDate = new Date(startDateString);
-    startDate.setHours(12, 0, 0, 0); // Ensure consistent date handling
+  const startDate = new Date(startDateString);
+  startDate.setHours(12, 0, 0, 0); // Ensure consistent date handling
 
-    const agendaItems = [];
+  const agendaItems = [];
 
-    // Calculate +1 Week
-    const datePlus1Week = new Date(startDate);
-    datePlus1Week.setDate(startDate.getDate() + 7);
-    agendaItems.push({
-      topic: topicName,
-      revisionDate: formatDate(datePlus1Week),
-       intervalLabel: "+1 Week"
-    });
+  // Calculate +1 Week
+  const datePlus1Week = new Date(startDate);
+  datePlus1Week.setDate(startDate.getDate() + 7);
+  agendaItems.push({
+    topic: topicName,
+    revisionDate: formatDate(datePlus1Week),
+    intervalLabel: "+1 Week"
+  });
 
-    // --- NEW: Calculate +1 Month ---
-    const datePlus1Month = new Date(startDate);
-    datePlus1Month.setMonth(startDate.getMonth() + 1);
-    agendaItems.push({
-      topic: topicName,
-      revisionDate: formatDate(datePlus1Month),
-      intervalLabel: "+1 Month" //add label interval 
-    });
-    // --- END OF +1 Month ---
+  // --- NEW: Calculate +1 Month ---
+  const datePlus1Month = new Date(startDate);
+  datePlus1Month.setMonth(startDate.getMonth() + 1);
+  agendaItems.push({
+    topic: topicName,
+    revisionDate: formatDate(datePlus1Month),
+    intervalLabel: "+1 Month" //add label interval 
+  });
+  // --- END OF +1 Month ---
 
-    // --- NEW: Calculate +3 Months ---
-    const datePlus3Months = new Date(startDate);
-    datePlus3Months.setMonth(startDate.getMonth() + 3);
-    agendaItems.push({
-      topic: topicName,
-      revisionDate: formatDate(datePlus3Months),
-      intervalLabel: "+3 Months"
-    });
-    // --- END OF +3 Months ---
+  // --- NEW: Calculate +3 Months ---
+  const datePlus3Months = new Date(startDate);
+  datePlus3Months.setMonth(startDate.getMonth() + 3);
+  agendaItems.push({
+    topic: topicName,
+    revisionDate: formatDate(datePlus3Months),
+    intervalLabel: "+3 Months"
+  });
+  // --- END OF +3 Months ---
 
-    // --- NEW: Calculate +6 Months ---
-    const datePlus6Months = new Date(startDate);
-    datePlus6Months.setMonth(startDate.getMonth() + 6);
-    agendaItems.push({
-      topic: topicName,
-      revisionDate: formatDate(datePlus6Months),
-      intervalLabel: "+6 Months" 
-    });
-    // --- END OF +6 Months ---
+  // --- NEW: Calculate +6 Months ---
+  const datePlus6Months = new Date(startDate);
+  datePlus6Months.setMonth(startDate.getMonth() + 6);
+  agendaItems.push({
+    topic: topicName,
+    revisionDate: formatDate(datePlus6Months),
+    intervalLabel: "+6 Months"
+  });
+  // --- END OF +6 Months ---
 
-    // --- NEW: Calculate +1 Year ---
-    const datePlus1Year = new Date(startDate);
-    datePlus1Year.setFullYear(startDate.getFullYear() + 1);
-    agendaItems.push({
-      topic: topicName,
-      revisionDate: formatDate(datePlus1Year),
-      intervalLabel: "+1 Year"
-    });
- 
+  // --- NEW: Calculate +1 Year ---
+  const datePlus1Year = new Date(startDate);
+  datePlus1Year.setFullYear(startDate.getFullYear() + 1);
+  agendaItems.push({
+    topic: topicName,
+    revisionDate: formatDate(datePlus1Year),
+    intervalLabel: "+1 Year"
+  });
 
-    console.log("Calculated agenda items (with labels):", agendaItems); // Log the full list
-    return agendaItems;
-  }
+
+  console.log("Calculated agenda items (with labels):", agendaItems); // Log the full list
+  return agendaItems;
+}
 
 // --- CARD 8 PAHESE B Function to Render Agenda for a User 
 function renderAgenda(userId) {
@@ -140,30 +139,29 @@ function renderAgenda(userId) {
 window.onload = function () {
   const users = getUserIDs();
   //document.querySelector("body").innerText = `There are ${users.length} users`;// coment this LINE!!! OR DELET IT
-
   // REMEMBER NOT CLOSING WINDOW.ONLOAD UNTIL THE END OF THE PROJECT/CODE!!!!//
 
 
-// ELEMENT REFERENCE/
-const userSelect = document.getElementById("userSelect");
+  // ELEMENT REFERENCE/
+  const userSelect = document.getElementById("userSelect");
 
-//ELEMENTS FORM REFERENCE//
-const addTaskForm = document.getElementById("addTaskForm");
-const taskNameInput = document.getElementById("taskNameInput");
-const startDateInput = document.getElementById("startDateInput");
-const submitTaskButton = document.getElementById("submitTaskButton");
+  //ELEMENTS FORM REFERENCE//
+  const addTaskForm = document.getElementById("addTaskForm");
+  const taskNameInput = document.getElementById("taskNameInput");
+  const startDateInput = document.getElementById("startDateInput");
+  const submitTaskButton = document.getElementById("submitTaskButton");
   //console.log(addTaskForm, taskNameInput, startDateInput);
-// AREA DISPLAY REF//
-const taskDisplayArea = document.getElementById("taskDisplayArea");
-const taskList = document.getElementById("taskList");
-const noTaskMesage = document.getElementById("noTaskMesage");
+  // AREA DISPLAY REF//
+  const taskDisplayArea = document.getElementById("taskDisplayArea");
+  const taskList = document.getElementById("taskList");
+  const noTaskMesage = document.getElementById("noTaskMesage");
 
-// STARTING selectUsrrID from the dropfdonw menu//
+  // STARTING selectUsrrID from the dropfdonw menu//
 
-const userSelectDropdown = document.getElementById("userSelect");
+  const userSelectDropdown = document.getElementById("userSelect");
 
   //1- safet check if dropdonw existe:
-  
+
   if (userSelectDropdown) {
     console.log("SUCCESS - The id='userSelect' HTML element was found.");
 
@@ -191,12 +189,12 @@ const userSelectDropdown = document.getElementById("userSelect");
       const day = String(today.getDate()).padStart(2, '0');       // convert to String/ padstart make sure it is 2 digits
 
       const formattedDate = `${year}-${month}-${day}`; // e.g., "2024-05-17"
-    
+
 
       startDateInput.value = formattedDate; // Set the value of the date input
       console.log("Default start date set to:", formattedDate);
 
-      
+
     } else {
       console.warn("startDateInput element not found. Cannot set default date.");
     }
@@ -210,9 +208,9 @@ const userSelectDropdown = document.getElementById("userSelect");
       const userIdsArray = getUserIDs(); // CALL the function
 
       // loop in the userIdsArray 
-      userIdsArray.forEach(function (userId) { 
+      userIdsArray.forEach(function (userId) {
         const option = document.createElement('option');
-        option.value = userId;                 
+        option.value = userId;
         option.textContent = `User ${userId}`; //get value of the arry or ption.textContent = userId; ( 1, 2, 3, 4, 5)
         userSelectDropdown.appendChild(option); // show creat value in the dropmenu visible in the broser
       });
@@ -235,7 +233,7 @@ const userSelectDropdown = document.getElementById("userSelect");
   //CARD 03---Displaying Tasks for Selected Use/ PART 1= CHECK AND CHANGE USER
 
   //const userSelectDropdown = document.getElementById("userSelect"); // userSelectDropdown/userSelect need to watch this to check if it has been changed
-  
+
 
   if (userSelectDropdown) { // check if it exists and has been changed
     userSelectDropdown.addEventListener('change', function (event) {
@@ -244,49 +242,49 @@ const userSelectDropdown = document.getElementById("userSelect");
 
       const selectedUserId = event.target.value; // 'event.target' is the dropdown element itself / value is the option choosen
       console.log("Selected User ID:", selectedUserId); //keep this before Card 8 phase B
-      renderAgenda(selectedUserId); 
+      renderAgenda(selectedUserId);
 
       // --- All the old display logic that was here is now GONE from the event listener ---
 
 
-// A)= if user has been chaneg before display task need to clear dispaly
+      // A)= if user has been chaneg before display task need to clear dispaly
 
-  // taskList.innerHTML = ''; // This removes all <li> child elements from the <ul>
-  // console.log("Task list cleared.");
+      // taskList.innerHTML = ''; // This removes all <li> child elements from the <ul>
+      // console.log("Task list cleared.");
 
- //B) NOW GET DATA/ TASK DO USER
+      //B) NOW GET DATA/ TASK DO USER
 
-//   if (selectedUserId) { // try to get data if a user ID was actually selected
-//     const agendaItems = getData(selectedUserId); // Fetch data using the function from storage.js
-//     console.log("Data for user:", selectedUserId, agendaItems);
+      //   if (selectedUserId) { // try to get data if a user ID was actually selected
+      //     const agendaItems = getData(selectedUserId); // Fetch data using the function from storage.js
+      //     console.log("Data for user:", selectedUserId, agendaItems);
 
-//   //C)  CHECK TASK FOR THE USER 
-//     // Now, check if this selected user HAS any tasks
+      //   //C)  CHECK TASK FOR THE USER 
+      //     // Now, check if this selected user HAS any tasks
 
-//       if (agendaItems && agendaItems.length > 0) {
-//         // There ARE agenda items to display
-//         noTaskMesage.style.display = 'none'; // Hide the "no tasks" message
-//         taskList.style.display = '';        // Make sure the <ul> is visible (resets to default display)
+      //       if (agendaItems && agendaItems.length > 0) {
+      //         // There ARE agenda items to display
+      //         noTaskMesage.style.display = 'none'; // Hide the "no tasks" message
+      //         taskList.style.display = '';        // Make sure the <ul> is visible (resets to default display)
 
 
-// //D) DISPLAY TASKS OR "MESSAgE NO TASKS"
+      // //D) DISPLAY TASKS OR "MESSAgE NO TASKS"
 
-//         agendaItems.forEach(function (item) {
-//           const listItem = document.createElement('li'); // Create a new <li> element
-//           listItem.textContent = `${item.topic} - ${item.revisionDate}`; // Set its text
-//           taskList.appendChild(listItem); // Add the <li> to the <ul>
-//         });
-//         console.log(`Displayed ${agendaItems.length} tasks for User ${selectedUserId}`);
-//       }
-//       } else {
-//         // This is the 'else' for 'if (selectedUserId)'
-//         // NO user is selected (e.g., "Select a user..." option was chosen)
-//         noTaskMesage.style.display = 'block'; // Show a message
-//         noTaskMesage.textContent = "Please select a user to see their agenda."; // Set appropriate message
-//         taskList.style.display = 'none';      // Hide the task list UL
-//        console.log("No user selected (default option). Displaying 'Please select' message."); 
-//       }
-    
+      //         agendaItems.forEach(function (item) {
+      //           const listItem = document.createElement('li'); // Create a new <li> element
+      //           listItem.textContent = `${item.topic} - ${item.revisionDate}`; // Set its text
+      //           taskList.appendChild(listItem); // Add the <li> to the <ul>
+      //         });
+      //         console.log(`Displayed ${agendaItems.length} tasks for User ${selectedUserId}`);
+      //       }
+      //       } else {
+      //         // This is the 'else' for 'if (selectedUserId)'
+      //         // NO user is selected (e.g., "Select a user..." option was chosen)
+      //         noTaskMesage.style.display = 'block'; // Show a message
+      //         noTaskMesage.textContent = "Please select a user to see their agenda."; // Set appropriate message
+      //         taskList.style.display = 'none';      // Hide the task list UL
+      //        console.log("No user selected (default option). Displaying 'Please select' message."); 
+      //       }
+
     }); // Close  addEventListener function and call
 
     // --- NEW pase 4: Event Listener for Form Submission ---
@@ -306,7 +304,7 @@ const userSelectDropdown = document.getElementById("userSelect");
 
         // CARD 8 PART C:
 
-  
+
         if (taskName && startDate) { // Basic validation: ensure both fields have a value
           const newAgendaItems = calculateRevisionDates(startDate, taskName);
           console.log("Form Submit - Calculated Spaced Repetition Dates:", newAgendaItems);
@@ -315,7 +313,7 @@ const userSelectDropdown = document.getElementById("userSelect");
           const currentSelectedUserId = userSelectDropdown.value;
 
           if (currentSelectedUserId) { // check the user is selected
-         
+
             addData(currentSelectedUserId, newAgendaItems);   // Call addData to save the new items
             console.log(`Form Submit - Added ${newAgendaItems.length} new items for User ID: ${currentSelectedUserId}`);
 
@@ -344,11 +342,11 @@ const userSelectDropdown = document.getElementById("userSelect");
     } else {
       console.error("CRITICAL: addTaskForm element not found. Cannot add submit listener.");
     }
-  
 
-  } else { 
+
+  } else {
     console.error("CRITICAL: Could not add event listener because userSelectDropdown was not found.");
-  }  
+  }
 
 
 
